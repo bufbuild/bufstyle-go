@@ -15,31 +15,34 @@
 package typeban
 
 import (
+	"fmt"
+
 	"golang.org/x/tools/go/analysis"
 )
-
-var bannedTypes = map[string]struct{}{
-	"sync.Pool": {},
-}
 
 // New returns a new set of Analyzers.
 func New() []*analysis.Analyzer {
 	return []*analysis.Analyzer{
-		{
-			Name: "TYPE_BAN",
-			Doc:  "Verifies that specific types are not used.",
-			Run: func(pass *analysis.Pass) (any, error) {
-				if typesInfo := pass.TypesInfo; typesInfo != nil {
-					for expr, typeAndValue := range pass.TypesInfo.Types {
-						if t := typeAndValue.Type; t != nil {
-							if value, ok := bannedTypes[t.String()]; ok {
-								pass.Reportf(expr.Pos(), "%s cannot be used", value)
-							}
+		newFor("NO_SYNC_POOL", "sync.Pool"),
+	}
+}
+
+func newFor(name string, bannedType string) *analysis.Analyzer {
+	return &analysis.Analyzer{
+		Name: name,
+		Doc:  fmt.Sprintf("Verifies that %s is not used.", bannedType),
+		Run: func(pass *analysis.Pass) (any, error) {
+			if typesInfo := pass.TypesInfo; typesInfo != nil {
+				for expr, typeAndValue := range pass.TypesInfo.Types {
+					if t := typeAndValue.Type; t != nil {
+						value := t.String()
+						if value == bannedType {
+							pass.Reportf(expr.Pos(), "%s cannot be used", value)
 						}
 					}
 				}
-				return nil, nil
-			},
+			}
+			return nil, nil
 		},
 	}
 }
