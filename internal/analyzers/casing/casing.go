@@ -33,8 +33,10 @@ func New() []*analysis.Analyzer {
 		newFor("DIRPATH_UPPER", "DirPath", "Dirpath"),
 		//newFor("FILENAME_LOWER", "fileName", "filename"),
 		//newFor("FILENAME_UPPER", "FileName", "Filename"),
-		newFor("FILEPATH_LOWER", "filePath", "filepath"),
-		newFor("FILEPATH_UPPER", "FilePath", "Filepath"),
+		// TODO: Re-enable after we fix the analyzer to ignore package uses
+		// This renames filepath. to filePath.
+		//newFor("FILEPATH_LOWER", "filePath", "filepath"),
+		//newFor("FILEPATH_UPPER", "FilePath", "Filepath"),
 	}
 }
 
