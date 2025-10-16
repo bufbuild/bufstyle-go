@@ -1,0 +1,5 @@
+/.tmp/
+/bufstyle
+*.pprof
+*.svg
+cover.out
