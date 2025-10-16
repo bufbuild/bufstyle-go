@@ -43,14 +43,14 @@ func newFor(name string, good string, bad string) *analysis.Analyzer {
 				util.ForEachComment(
 					pass,
 					func(comment *ast.Comment) error {
-						check(pass, comment.Slash, comment.Text, good, bad)
+						check(pass, comment.Pos(), comment.Text, good, bad)
 						return nil
 					},
 				),
-				util.ForEachObject(
+				util.ForEachDefAndUse(
 					pass,
-					func(object types.Object) error {
-						check(pass, object.Pos(), object.Name(), good, bad)
+					func(pos token.Pos, object types.Object) error {
+						check(pass, pos, object.Name(), good, bad)
 						return nil
 					},
 				),

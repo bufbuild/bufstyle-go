@@ -16,6 +16,7 @@ package util
 
 import (
 	"go/ast"
+	"go/token"
 	"go/types"
 
 	"golang.org/x/tools/go/analysis"
@@ -35,16 +36,38 @@ func ForEachComment(pass *analysis.Pass, f func(*ast.Comment) error) error {
 	return nil
 }
 
-// ForEachObject iterates over every Object and calls f.
-func ForEachObject(pass *analysis.Pass, f func(types.Object) error) error {
+// ForEachDef iterates over every Object definition and calls f.
+func ForEachDef(pass *analysis.Pass, f func(token.Pos, types.Object) error) error {
 	if typesInfo := pass.TypesInfo; typesInfo != nil {
-		for _, object := range pass.TypesInfo.Defs {
+		for ident, object := range pass.TypesInfo.Defs {
 			if object != nil {
-				if err := f(object); err != nil {
+				if err := f(ident.Pos(), object); err != nil {
 					return err
 				}
 			}
 		}
 	}
 	return nil
+}
+
+// ForEachUse iterates over every Object use and calls f.
+func ForEachUse(pass *analysis.Pass, f func(token.Pos, types.Object) error) error {
+	if typesInfo := pass.TypesInfo; typesInfo != nil {
+		for ident, object := range pass.TypesInfo.Uses {
+			if object != nil {
+				if err := f(ident.Pos(), object); err != nil {
+					return err
+				}
+			}
+		}
+	}
+	return nil
+}
+
+// ForEachDefAndUse iterates over every Object definition and use and calls f.
+func ForEachDefAndUse(pass *analysis.Pass, f func(token.Pos, types.Object) error) error {
+	if err := ForEachDef(pass, f); err != nil {
+		return err
+	}
+	return ForEachUse(pass, f)
 }

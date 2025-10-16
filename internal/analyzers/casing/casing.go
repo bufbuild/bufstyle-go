@@ -43,10 +43,10 @@ func newFor(name string, good string, bad string) *analysis.Analyzer {
 		Name: name,
 		Doc:  fmt.Sprintf("Verifies that %q is used instead of %q.", good, bad),
 		Run: func(pass *analysis.Pass) (any, error) {
-			return nil, util.ForEachObject(
+			return nil, util.ForEachDefAndUse(
 				pass,
-				func(object types.Object) error {
-					check(pass, object.Pos(), object.Name(), good, bad)
+				func(pos token.Pos, object types.Object) error {
+					check(pass, pos, object.Name(), good, bad)
 					return nil
 				},
 			)
