@@ -14,6 +14,12 @@ go install buf.build/go/bufstyle
 bufstyle ./...
 ```
 
+To automatically fix issues that `bufstyle` knows how to fix:
+
+```
+bufstyle -fix ./...
+```
+
 A `.bufstyle.yaml` file can be added in the working directory to disable and ignore analyzers:
 
 ```yaml
