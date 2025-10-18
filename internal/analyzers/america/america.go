@@ -50,6 +50,9 @@ func newFor(name string, good string, bad string) *analysis.Analyzer {
 				util.ForEachDefAndUse(
 					pass,
 					func(pos token.Pos, object types.Object) error {
+						if _, ok := object.(*types.PkgName); ok {
+							return nil
+						}
 						check(pass, pos, object.Name(), good, bad)
 						return nil
 					},

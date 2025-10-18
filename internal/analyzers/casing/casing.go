@@ -33,10 +33,8 @@ func New() []*analysis.Analyzer {
 		newFor("DIRPATH_UPPER", "DirPath", "Dirpath"),
 		//newFor("FILENAME_LOWER", "fileName", "filename"),
 		//newFor("FILENAME_UPPER", "FileName", "Filename"),
-		// TODO: Re-enable after we fix the analyzer to ignore package uses
-		// This renames filepath. to filePath.
-		//newFor("FILEPATH_LOWER", "filePath", "filepath"),
-		//newFor("FILEPATH_UPPER", "FilePath", "Filepath"),
+		newFor("FILEPATH_LOWER", "filePath", "filepath"),
+		newFor("FILEPATH_UPPER", "FilePath", "Filepath"),
 	}
 }
 
@@ -48,6 +46,9 @@ func newFor(name string, good string, bad string) *analysis.Analyzer {
 			return nil, util.ForEachDefAndUse(
 				pass,
 				func(pos token.Pos, object types.Object) error {
+					if _, ok := object.(*types.PkgName); ok {
+						return nil
+					}
 					check(pass, pos, object.Name(), good, bad)
 					return nil
 				},

@@ -1,0 +1,3 @@
+package filepath
+
+func foo() {}

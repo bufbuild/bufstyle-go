@@ -37,6 +37,8 @@ func ForEachComment(pass *analysis.Pass, f func(*ast.Comment) error) error {
 }
 
 // ForEachDef iterates over every Object definition and calls f.
+//
+// Ignores packages.
 func ForEachDef(pass *analysis.Pass, f func(token.Pos, types.Object) error) error {
 	if typesInfo := pass.TypesInfo; typesInfo != nil {
 		for ident, object := range pass.TypesInfo.Defs {
@@ -51,6 +53,8 @@ func ForEachDef(pass *analysis.Pass, f func(token.Pos, types.Object) error) erro
 }
 
 // ForEachUse iterates over every Object use and calls f.
+//
+// Ignores packages.
 func ForEachUse(pass *analysis.Pass, f func(token.Pos, types.Object) error) error {
 	if typesInfo := pass.TypesInfo; typesInfo != nil {
 		for ident, object := range pass.TypesInfo.Uses {
@@ -65,6 +69,8 @@ func ForEachUse(pass *analysis.Pass, f func(token.Pos, types.Object) error) erro
 }
 
 // ForEachDefAndUse iterates over every Object definition and use and calls f.
+//
+// Ignores packages.
 func ForEachDefAndUse(pass *analysis.Pass, f func(token.Pos, types.Object) error) error {
 	if err := ForEachDef(pass, f); err != nil {
 		return err

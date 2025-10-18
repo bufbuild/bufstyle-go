@@ -27,7 +27,7 @@ import (
 // Run runs the tests.
 //
 // It expects tests to be in "testdata/src/p" relative to the Go package the tests are being run in.
-func Run(t *testing.T, analyzers []*analysis.Analyzer) {
+func Run(t *testing.T, analyzers []*analysis.Analyzer, pkgs ...string) {
 	pwd, err := os.Getwd()
 	require.NoError(t, err)
 	all := &analysis.Analyzer{
@@ -42,5 +42,5 @@ func Run(t *testing.T, analyzers []*analysis.Analyzer) {
 			return nil, nil
 		},
 	}
-	analysistest.Run(t, filepath.Join(pwd, "testdata"), all, "p")
+	analysistest.Run(t, filepath.Join(pwd, "testdata"), all, pkgs...)
 }

@@ -22,5 +22,5 @@ import (
 
 func TestAll(t *testing.T) {
 	t.Parallel()
-	analyzerstesting.Run(t, New())
+	analyzerstesting.Run(t, New(), "p", "filepath")
 }
