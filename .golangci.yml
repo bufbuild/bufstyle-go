@@ -38,6 +38,7 @@ linters:
     - maintidx          # covered by gocyclo
     - nilnil            # allow this
     - nlreturn          # generous whitespace violates house style
+    - tenv              # deprecated
     - testifylint       # does not want us to use assert
     - testpackage       # internal tests are fine
     - thelper           # we want to print out the whole stack
