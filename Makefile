@@ -13,7 +13,7 @@ COPYRIGHT_YEARS := 2025
 LICENSE_IGNORE := --ignore testdata/
 
 BUF_VERSION := v1.58.0
-GOLANGCI_LINT_VERSION := v1.64.8
+GOLANGCI_LINT_VERSION := v2.12.2
 # https://github.com/golangci/golangci-lint/issues/4837
 GOLANGCI_LINT_GOTOOLCHAIN := go1.26.7
 #GO_GET_PKGS :=
@@ -47,11 +47,17 @@ install: ## Install all binaries
 .PHONY: lint
 lint: $(BIN)/golangci-lint ## Lint
 	go vet ./...
+	GOTOOLCHAIN=$(GOLANGCI_LINT_GOTOOLCHAIN) golangci-lint fmt --diff
 	GOTOOLCHAIN=$(GOLANGCI_LINT_GOTOOLCHAIN) golangci-lint run --modules-download-mode=readonly --timeout=3m0s
 
 .PHONY: lintfix
 lintfix: $(BIN)/golangci-lint ## Automatically fix some lint errors
+	GOTOOLCHAIN=$(GOLANGCI_LINT_GOTOOLCHAIN) golangci-lint fmt
 	GOTOOLCHAIN=$(GOLANGCI_LINT_GOTOOLCHAIN) golangci-lint run --fix --modules-download-mode=readonly --timeout=3m0s
+
+.PHONY: format
+format: $(BIN)/golangci-lint ## Format code
+	GOTOOLCHAIN=$(GOLANGCI_LINT_GOTOOLCHAIN) golangci-lint fmt
 
 .PHONY: generate
 generate: $(BIN)/license-header ## Regenerate code and licenses
@@ -76,4 +82,4 @@ $(BIN)/license-header: Makefile
 
 $(BIN)/golangci-lint: Makefile
 	@mkdir -p $(@D)
-	GOTOOLCHAIN=$(GOLANGCI_LINT_GOTOOLCHAIN) go install github.com/golangci/golangci-lint/cmd/golangci-lint@$(GOLANGCI_LINT_VERSION)
+	GOTOOLCHAIN=$(GOLANGCI_LINT_GOTOOLCHAIN) go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@$(GOLANGCI_LINT_VERSION)
