@@ -1,25 +1,6 @@
-linters-settings:
-  errcheck:
-    check-type-assertions: true
-  forbidigo:
-    forbid:
-      - '^fmt\.Print'
-      - '^log\.'
-      - '^print$'
-      - '^println$'
-      - '^panic$'
-  godox:
-    # TODO, OPT, etc. comments are fine to commit. Use FIXME comments for
-    # temporary hacks, and use godox to prevent committing them.
-    keywords: [FIXME]
-  varnamelen:
-    ignore-decls:
-      - T any
-      - i int
-      - wg sync.WaitGroup
-      - id string
+version: "2"
 linters:
-  enable-all: true
+  default: all
   disable:
     - cyclop            # covered by gocyclo
     - depguard          # unnecessary for small libraries
@@ -29,8 +10,7 @@ linters:
     - gochecknoglobals  # many exceptions
     - gocognit          # dubious "cognitive overhead" quantification
     - gocritic          # many exceptions
-    - gofumpt           # prefer standard gofmt
-    - goimports         # rely on gci instead
+    - gomodguard        # deprecated in v2.12.0, replaced by gomodguard_v2
     - inamedparam       # not standard style
     - interfacebloat    # many exceptions
     - ireturn           # "accept interfaces, return structs" isn't ironclad
@@ -38,15 +18,49 @@ linters:
     - maintidx          # covered by gocyclo
     - nilnil            # allow this
     - nlreturn          # generous whitespace violates house style
-    - tenv              # deprecated
+    - noinlineerr       # excess scope violates house style
     - testifylint       # does not want us to use assert
     - testpackage       # internal tests are fine
     - thelper           # we want to print out the whole stack
     - wrapcheck         # don't _always_ need to wrap errors
     - wsl               # generous whitespace violates house style
-issues:
-  exclude-dirs-use-default: false
-  exclude-rules:
-    - linters:
-        - prealloc
-      path: internal/internal.go
+    - wsl_v5            # generous whitespace violates house style
+  settings:
+    errcheck:
+      check-type-assertions: true
+    forbidigo:
+      forbid:
+        - pattern: '^fmt\.Print'
+        - pattern: '^log\.'
+        - pattern: '^print$'
+        - pattern: '^println$'
+        - pattern: '^panic$'
+    godox:
+      # TODO, OPT, etc. comments are fine to commit. Use FIXME comments for
+      # temporary hacks, and use godox to prevent committing them.
+      keywords: [FIXME]
+    varnamelen:
+      ignore-decls:
+        - T any
+        - i int
+        - wg sync.WaitGroup
+        - id string
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    rules:
+      - linters:
+          - prealloc
+        path: internal/internal.go
+formatters:
+  # gofumpt is omitted: prefer standard gofmt.
+  # goimports is omitted: rely on gci instead.
+  enable:
+    - gci
+    - gofmt
+  exclusions:
+    generated: lax
