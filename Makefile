@@ -13,10 +13,9 @@ COPYRIGHT_YEARS := 2025
 LICENSE_IGNORE := --ignore testdata/
 
 BUF_VERSION := v1.58.0
-GO_MOD_GOTOOLCHAIN := go1.25.3
 GOLANGCI_LINT_VERSION := v1.64.8
 # https://github.com/golangci/golangci-lint/issues/4837
-GOLANGCI_LINT_GOTOOLCHAIN := $(GO_MOD_GOTOOLCHAIN)
+GOLANGCI_LINT_GOTOOLCHAIN := go1.26.7
 #GO_GET_PKGS :=
 
 .PHONY: help
@@ -63,7 +62,6 @@ generate: $(BIN)/license-header ## Regenerate code and licenses
 
 .PHONY: upgrade
 upgrade: ## Upgrade dependencies
-	go mod edit -toolchain=$(GO_MOD_GOTOOLCHAIN)
 	go get -u -t ./... $(GO_GET_PKGS)
 	go mod tidy -v
 
