@@ -13,9 +13,9 @@ COPYRIGHT_YEARS := 2025
 LICENSE_IGNORE := --ignore testdata/
 
 BUF_VERSION := v1.58.0
-GOLANGCI_LINT_VERSION := v2.12.2
+GOLANGCI_LINT_VERSION := v2.14.0
 # https://github.com/golangci/golangci-lint/issues/4837
-GOLANGCI_LINT_GOTOOLCHAIN := go1.26.7
+GOLANGCI_LINT_GOTOOLCHAIN := go1.27.2
 #GO_GET_PKGS :=
 
 .PHONY: help
