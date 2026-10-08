@@ -22,8 +22,8 @@ import (
 	"os"
 	"path/filepath"
 
+	"go.yaml.in/yaml/v3"
 	"golang.org/x/tools/go/analysis"
-	"gopkg.in/yaml.v3"
 )
 
 const (
