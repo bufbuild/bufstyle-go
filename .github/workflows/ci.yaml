@@ -26,8 +26,4 @@ jobs:
       - name: Test
         run: make test
       - name: Lint
-        # Often, lint & gofmt guidelines depend on the Go version. To prevent
-        # conflicting guidance, run only on the most recent supported version.
-        # For the same reason, only check generated code on the most recent
-        # supported version.
         run: make checkgenerate && make lint
